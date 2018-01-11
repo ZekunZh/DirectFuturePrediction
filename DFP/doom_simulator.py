@@ -5,6 +5,7 @@ from __future__ import print_function
 import sys
 import os
 
+##
 vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
 # sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
 sys.path = [vizdoom_path] + sys.path

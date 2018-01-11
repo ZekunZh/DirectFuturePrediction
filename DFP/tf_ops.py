@@ -1,6 +1,7 @@
 import math
 import numpy as np 
 import tensorflow as tf
+from .vgg19 import VGG19
 
 def msra_stddev(x, k_h, k_w): 
     return 1/math.sqrt(0.5*k_w*k_h*x.get_shape().as_list()[-1])
@@ -69,3 +70,12 @@ def fc_net(data, params, name, last_linear = False, return_layers = [-1], msra_c
 
 def flatten(data):
     return tf.reshape(data, [-1, np.prod(data.get_shape().as_list()[1:])])
+
+
+###############################################
+# VGG19 block
+###############################################
+def vgg19(input_):
+    input_shape = input_.get_shape()
+    vgg = VGG19(image_shape=input_shape, input_tensor=input_)
+    return tf.identity(vgg['block5_pool'], name='vgg19_output')

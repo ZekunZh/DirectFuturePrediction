@@ -95,7 +95,7 @@ def main(main_args):
     agent_args['print_err_every'] = 50
     agent_args['detailed_summary_every'] = 500
     agent_args['test_pred_every'] = 0
-    agent_args['test_policy_every'] = 7812
+    agent_args['test_policy_every'] = 78
     agent_args['num_batches_per_pred_test'] = 0
     agent_args['num_steps_per_policy_test'] = test_policy_experience_args['memory_capacity'] / simulator_args['num_simulators']
     agent_args['checkpoint_every'] = 10000
@@ -104,7 +104,7 @@ def main(main_args):
     
     # experiment arguments
     experiment_args = {}
-    experiment_args['num_train_iterations'] = 10000
+    experiment_args['num_train_iterations'] = 1000
     experiment_args['test_objective_coeffs_temporal'] = np.array([0., 0., 0., 0.5, 0.5, 1.])
     experiment_args['test_objective_coeffs_meas'] = np.array([0.5,0.5,1.])
     experiment_args['test_random_prob'] = 0.
