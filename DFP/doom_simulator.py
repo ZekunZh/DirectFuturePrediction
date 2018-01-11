@@ -5,8 +5,8 @@ from __future__ import print_function
 import sys
 import os
 
-vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
-# sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
+vizdoom_path = '../../../vizdoom_2017_11_30'
+sys.path = [os.path.join(vizdoom_path,'bin')] + sys.path
 sys.path = [vizdoom_path] + sys.path
 
 import vizdoom 
@@ -30,10 +30,10 @@ class DoomSimulator:
         self.game_args = args['game_args']
         
         self._game = vizdoom.DoomGame()
-        # self._game.set_vizdoom_path(os.path.join(vizdoom_path,'bin/vizdoom'))
-        # self._game.set_doom_game_path(os.path.join(vizdoom_path,'bin/freedoom2.wad'))
-        self._game.set_vizdoom_path(os.path.join(vizdoom_path,'vizdoom'))
-        self._game.set_doom_game_path(os.path.join(vizdoom_path,'freedoom2.wad'))
+        self._game.set_vizdoom_path(os.path.join(vizdoom_path,'bin/vizdoom'))
+        self._game.set_doom_game_path(os.path.join(vizdoom_path,'bin/freedoom2.wad'))
+        # self._game.set_vizdoom_path(os.path.join(vizdoom_path,'vizdoom'))
+        # self._game.set_doom_game_path(os.path.join(vizdoom_path,'freedoom2.wad'))
         self._game.load_config(self.config)
         self._game.add_game_args(self.game_args)
         self.curr_map = 0

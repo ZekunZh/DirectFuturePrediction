@@ -371,7 +371,9 @@ class Agent:
         experience.head_offset = num_steps + 1
         experience.reset()
         actor = self.get_actor(objective_coeffs=objective_coeffs, random_prob=random_prob, random_objective_coeffs=False)
-        experience.add_n_steps_with_actor(simulator, num_steps, actor, verbose=True, write_predictions=write_predictions, write_logs=True, global_step=self.curr_step*self.batch_size)
+        experience.add_n_steps_with_actor(simulator, num_steps, actor, verbose=True, 
+                                            write_predictions=write_predictions, write_logs=True, 
+                                            global_step=self.curr_step*self.batch_size)
         total_avg_meas, total_avg_rwrd = experience.compute_avg_meas_and_rwrd(0, num_steps*simulator.num_simulators)
         print('Average mean measurements  per episode:', total_avg_meas, '\nAverage reward per episode:', total_avg_rwrd)
             
@@ -384,7 +386,7 @@ class Agent:
             #self.writer.add_summary(tf_avg_meas_summary[0], self.curr_step)
             
             tf_avg_rwrd = tf.placeholder(tf.float32, total_avg_rwrd.shape)
-            tf_avg_rwrd_sum = tf.summary.scalar("test_avg_rwrd", tf_avg_rwrd)
+            tf_avg_rwrd_sum = tf.scalar_summary("test_avg_rwrd", tf_avg_rwrd)
             tf_avg_rwrd_summary = self.sess.run([tf_avg_rwrd_sum], 
                                                 feed_dict = {tf_avg_rwrd: total_avg_rwrd})
             self.writer.add_summary(tf_avg_rwrd_summary[0], self.curr_step)
