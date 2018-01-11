@@ -5,8 +5,9 @@ from __future__ import print_function
 import sys
 import os
 
-vizdoom_path = '../../../../toolboxes/ViZDoom_2017_03_31'
-sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
+vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
+# sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
+sys.path = [vizdoom_path] + sys.path
 
 import vizdoom 
 print(vizdoom.__file__)
@@ -21,6 +22,7 @@ class DoomSimulator:
     def __init__(self, args):        
         self.config = args['config']
         self.resolution = args['resolution']
+        # self.resolution = (160, 120)
         self.frame_skip = args['frame_skip']
         self.color_mode = args['color_mode']
         self.switch_maps = args['switch_maps']
@@ -28,8 +30,10 @@ class DoomSimulator:
         self.game_args = args['game_args']
         
         self._game = vizdoom.DoomGame()
-        self._game.set_vizdoom_path(os.path.join(vizdoom_path,'bin/vizdoom'))
-        self._game.set_doom_game_path(os.path.join(vizdoom_path,'bin/freedoom2.wad'))
+        # self._game.set_vizdoom_path(os.path.join(vizdoom_path,'bin/vizdoom'))
+        # self._game.set_doom_game_path(os.path.join(vizdoom_path,'bin/freedoom2.wad'))
+        self._game.set_vizdoom_path(os.path.join(vizdoom_path,'vizdoom'))
+        self._game.set_doom_game_path(os.path.join(vizdoom_path,'freedoom2.wad'))
         self._game.load_config(self.config)
         self._game.add_game_args(self.game_args)
         self.curr_map = 0
@@ -53,7 +57,7 @@ class DoomSimulator:
             self.num_channels = 1
         else:
             print("Unknown color mode")
-            raise
+            raise ValueError("Unknown color mode")
 
         self.available_controls, self.continuous_controls, self.discrete_controls = self.analyze_controls(self.config)
         self.num_buttons = self._game.get_available_buttons_size()
@@ -122,6 +126,9 @@ class DoomSimulator:
                     if raw_img is None:
                         img = None
                     else:
+                        # cv2.imshow("raw_imag", raw_img[0])
+                        # cv2.waitKey(0)
+                        # cv2.destroyAllWindows()
                         img = cv2.resize(raw_img[0], (self.resolution[0], self.resolution[1]))[None,:,:]
                 else:
                     raise NotImplementedError('not implemented for non-Grayscale images')

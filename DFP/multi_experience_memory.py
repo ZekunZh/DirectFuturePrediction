@@ -172,7 +172,12 @@ class MultiExperienceMemory:
                     total_final_meas += prev_meas[ns]
                     total_accum_reward += accum_rewards[ns]
                     start_times[ns] = time.time()
-                    log_detailed.write(log_detailed_format.format(*([num_episodes, num_episode_steps[ns], episode_time, accum_rewards[ns]] + list(prev_meas[ns]) + list(avg_meas))))
+                    log_detailed.write(
+                        log_detailed_format.format(*(
+                            [num_episodes, 
+                            num_episode_steps[ns], 
+                            episode_time, 
+                            accum_rewards[ns]] + list(prev_meas[ns]) + list(avg_meas))))
                     accum_meas[ns] = 0
                     accum_rewards[ns] = 0
                     num_episode_steps[ns] = 0

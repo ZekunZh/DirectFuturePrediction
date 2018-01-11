@@ -355,7 +355,8 @@ class Agent:
                 self.save(self.checkpoint_dir, self.curr_step)
                 
             if self.test_policy_every and np.mod(self.curr_step, self.test_policy_every) == 0:
-                self.test_policy(simulator, test_policy_experience, self.objective_coeffs, self.num_steps_per_policy_test, random_prob=0., write_summary=True)
+                self.test_policy(simulator, test_policy_experience, self.objective_coeffs, 
+                                self.num_steps_per_policy_test, random_prob=0., write_summary=True)
             
             self.train_one_batch(experience)
             if np.mod(self.curr_step, self.add_experiences_every) == 0:
@@ -375,17 +376,18 @@ class Agent:
         print('Average mean measurements  per episode:', total_avg_meas, '\nAverage reward per episode:', total_avg_rwrd)
             
         if write_summary:
-            pass
+            # pass
         #TODO
             #tf_avg_meas = tf.placeholder(tf.float32, total_avg_meas.shape)
             #tf_avg_meas_sum = tf.summary.merge([tf.summary.scalar("test_avg_" + tag, tf_avg_meas) for tag,meas in simulator.simulators[0].meas_tags
             #tf_avg_meas_summary = self.sess.run([tf_avg_meas_sum], feed_dict = {tf_avg_meas: total_avg_meas})
             #self.writer.add_summary(tf_avg_meas_summary[0], self.curr_step)
             
-            #tf_avg_rwrd = tf.placeholder(tf.float32, total_avg_rwrd.shape)
-            #tf_avg_rwrd_sum = tf.summary.scalar("test_avg_rwrd", tf_avg_rwrd)
-            #tf_avg_rwrd_summary = self.sess.run([tf_avg_rwrd_sum], feed_dict = {tf_avg_rwrd: total_avg_rwrd})
-            #self.writer.add_summary(tf_avg_rwrd_summary[0], self.curr_step)
+            tf_avg_rwrd = tf.placeholder(tf.float32, total_avg_rwrd.shape)
+            tf_avg_rwrd_sum = tf.summary.scalar("test_avg_rwrd", tf_avg_rwrd)
+            tf_avg_rwrd_summary = self.sess.run([tf_avg_rwrd_sum], 
+                                                feed_dict = {tf_avg_rwrd: total_avg_rwrd})
+            self.writer.add_summary(tf_avg_rwrd_summary[0], self.curr_step)
             
         experience.head_offset = old_head_offset
         return None
