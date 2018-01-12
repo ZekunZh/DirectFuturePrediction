@@ -4,6 +4,7 @@ sys.path = ['../..'] + sys.path
 from DFP.multi_experiment import MultiExperiment
 import numpy as np
 import time
+from DFP.util import logging_setup
 
 def main(main_args):
     
@@ -21,9 +22,9 @@ def main(main_args):
     ## Simulator
     simulator_args = {}
     simulator_args['config'] = '../../maps/D3_battle.cfg'
-    simulator_args['resolution'] = (160,120)
+    simulator_args['resolution'] = (224,224)
     simulator_args['frame_skip'] = 4
-    simulator_args['color_mode'] = 'GRAY'   
+    simulator_args['color_mode'] = 'RGB'
     simulator_args['use_shaping_reward'] = False
     simulator_args['maps'] = ['MAP01']
     simulator_args['switch_maps'] = False
@@ -93,7 +94,7 @@ def main(main_args):
     
     # logging and testing
     agent_args['print_err_every'] = 50
-    agent_args['detailed_summary_every'] = 500
+    agent_args['detailed_summary_every'] = 1000
     agent_args['test_pred_every'] = 0
     agent_args['test_policy_every'] = 500
     agent_args['num_batches_per_pred_test'] = 0
@@ -104,7 +105,7 @@ def main(main_args):
     
     # experiment arguments
     experiment_args = {}
-    experiment_args['num_train_iterations'] = 20000
+    experiment_args['num_train_iterations'] = 820000
     experiment_args['test_objective_coeffs_temporal'] = np.array([0., 0., 0., 0.5, 0.5, 1.])
     experiment_args['test_objective_coeffs_meas'] = np.array([0.5,0.5,1.])
     experiment_args['test_random_prob'] = 0.
@@ -128,4 +129,5 @@ def main(main_args):
     
 
 if __name__ == '__main__':
+    logging_setup()
     main(sys.argv[1:])

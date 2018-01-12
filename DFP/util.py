@@ -6,6 +6,19 @@ import operator
 import matplotlib.pyplot as plt
 import json
 
+import logging
+import os
+##########################################################
+# Use logging to print
+##########################################################
+LOG_FORMAT = '%(asctime)-15s [%(levelname)s] %(message)s'
+
+def logging_setup():
+    log_level = logging.DEBUG if os.environ.get("LOG_LEVEL", 'INFO') == 'DEBUG' else logging.INFO
+    logging.basicConfig(level=log_level, format=LOG_FORMAT)
+
+
+
 def make_objective_indices_and_coeffs(temporal_coeffs, meas_coeffs):
     objective_coeffs = (np.reshape(temporal_coeffs, (1,-1)) * np.reshape(meas_coeffs, (-1,1))).flatten()
     objective_indices = np.where(np.abs(objective_coeffs) > 1e-8)[0]

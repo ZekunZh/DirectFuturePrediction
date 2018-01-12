@@ -3,3 +3,5 @@ logs/
 .idea/
 __pycache__/
 *.pyc
+examples/D3_battle/_vizdoom.ini
+examples/D3_battle/logs/log_brief.txt

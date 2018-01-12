@@ -4,9 +4,11 @@ ViZDoom wrapper
 from __future__ import print_function
 import sys
 import os
+import logging
 
-vizdoom_path = '../../../vizdoom_2017_11_30'
-sys.path = [os.path.join(vizdoom_path,'bin')] + sys.path
+vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
+# vizdoom_path = '/home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30'
+# sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
 sys.path = [vizdoom_path] + sys.path
 
 import vizdoom 
@@ -16,6 +18,7 @@ import time
 import numpy as np
 import re
 import cv2
+import matplotlib.pyplot as plt
 
 class DoomSimulator:
     
@@ -129,9 +132,32 @@ class DoomSimulator:
                         # cv2.imshow("raw_imag", raw_img[0])
                         # cv2.waitKey(0)
                         # cv2.destroyAllWindows()
+
+                        # img shape: (1 x resolution[0] x resolution[1])
                         img = cv2.resize(raw_img[0], (self.resolution[0], self.resolution[1]))[None,:,:]
+                        # logging.info("image shape: " + str(img.shape))
                 else:
-                    raise NotImplementedError('not implemented for non-Grayscale images')
+                    if raw_img is None:
+                        img = None
+                    else:
+                        # transform raw_img:  
+                        # (channel x height x width) -> (height x width x channel)
+                        raw_img = np.rollaxis(raw_img, 0, 3)
+                        
+                        # logging.info("raw image shape: " + str(raw_img.shape))
+                        # plt.imshow(raw_img)
+                        # plt.show()
+
+                        img = cv2.resize(raw_img, (self.resolution[0], self.resolution[1]))
+                        # logging.info("resized image shape: " + str(img.shape))
+                        # plt.imshow(img)
+                        # plt.show()
+
+                        # revert img shape: (3 x resolution[0] x resolution[1])
+                        img = np.rollaxis(img, 2, 0)
+                        # logging.info("reverted image shape: " + str(img.shape))
+
+                        # raise NotImplementedError('not implemented for non-Grayscale images')
             else:
                 img = raw_img
                 
