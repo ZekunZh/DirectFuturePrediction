@@ -10,6 +10,7 @@ from matplotlib import gridspec
 import time
 import os
 from . import util as my_util
+import pdb
 
 class MultiExperienceMemory:
 
@@ -66,6 +67,10 @@ class MultiExperienceMemory:
         '''
 
         self._images[self._curr_indices] = imgs
+#        print('==> check len indices {} len meass {}'.format(len(self._curr_indices), len(meass)))
+#        print('==> check elment shape', self._measurements[self._curr_indices[0]].shape)
+#        print('==> check meas shape', meass[0].shape)
+#        pdb.set_trace()
         self._measurements[self._curr_indices] = meass
         self._rewards[self._curr_indices] = rwrds
         self._terminals[self._curr_indices] = terms

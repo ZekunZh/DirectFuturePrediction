@@ -10,6 +10,7 @@ import os
 import re
 import itertools as it
 from . import util as my_util
+import pdb
 
 class Agent:
 
@@ -158,7 +159,7 @@ class Agent:
                                     name='input_actions')
         self.input_objective_coeffs = tf.placeholder(tf.float32, [None] + list(self.obj_shape),
                                     name='input_objective_coeffs')
-        
+
         if self.preprocess_input_images:
             self.input_images_preprocessed = self.preprocess_input_images(self.input_images)
         if self.preprocess_input_measurements:
@@ -293,6 +294,7 @@ class Agent:
     
     def train_one_batch(self, experience):
         state_imgs, state_meas, rwrds, terms, acts, targs, objs = experience.get_random_batch(self.batch_size)
+        #pdb.set_trace()
         acts = self.preprocess_actions(acts)
         res = self.sess.run([self.tf_minim, self.short_summary, self.detailed_summary] + self.errs_to_print,
                         feed_dict={ self.input_images: state_imgs, \
@@ -382,10 +384,10 @@ class Agent:
             #tf_avg_meas_summary = self.sess.run([tf_avg_meas_sum], feed_dict = {tf_avg_meas: total_avg_meas})
             #self.writer.add_summary(tf_avg_meas_summary[0], self.curr_step)
             
-            #tf_avg_rwrd = tf.placeholder(tf.float32, total_avg_rwrd.shape)
-            #tf_avg_rwrd_sum = tf.summary.scalar("test_avg_rwrd", tf_avg_rwrd)
-            #tf_avg_rwrd_summary = self.sess.run([tf_avg_rwrd_sum], feed_dict = {tf_avg_rwrd: total_avg_rwrd})
-            #self.writer.add_summary(tf_avg_rwrd_summary[0], self.curr_step)
+            tf_avg_rwrd = tf.placeholder(tf.float32, total_avg_rwrd.shape)
+            tf_avg_rwrd_sum = tf.summary.scalar("test_avg_rwrd", tf_avg_rwrd)
+            tf_avg_rwrd_summary = self.sess.run([tf_avg_rwrd_sum], feed_dict = {tf_avg_rwrd: total_avg_rwrd})
+            self.writer.add_summary(tf_avg_rwrd_summary[0], self.curr_step)
             
         experience.head_offset = old_head_offset
         return None

@@ -1,0 +1,246 @@
+*** Fatal Error ***
+Segmentation fault (signal 11)
+Address: (nil)
+
+System: Linux Ubuntu 4.4.0-104-generic #127-Ubuntu SMP Mon Dec 11 12:16:42 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+
+ViZDoom version 1.1.4 (ZDOOM 2.8.1) ()
+Compiler version: 5.4.0 20160609
+
+Command line: /home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30/bin/vizdoom -iwad /home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30/bin/freedoom2.wad -config _vizdoom.ini -skill 2 -width 160 -height 120 +vid_aspect 3 +fullscreen 0 +viz_controlled 1 +viz_instance_id o2235987h1 +use_mouse 0 -rngseed 513205263 +viz_labels 1 +viz_render_mode 1612 +viz_noconsole 1 +viz_screen_format 8 +viz_window_hidden 1 +viz_noxserver 1 -noidle -nojoy -nosound +viz_nosound 1 -file ../../maps/D3_battle.wad
+
+Wad 0: vizdoom.pk3
+Wad 1: freedoom2.wad
+Wad 2: D3_battle.wad
+
+Current map: MAP01
+
+viewx = 41495452
+viewy = 29098244
+viewz = 2995072
+viewangle = acee0000
+
+Executing: gdb --quiet --batch --command=gdb-respfile-fE1wdh
+[New LWP 15405]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x00007f696cd08f7b in __waitpid (pid=17353, stat_loc=0xbeacac, options=0) at ../sysdeps/unix/sysv/linux/waitpid.c:29
+
+* Loaded Libraries
+From                To                  Syms Read   Shared Object Library
+0x00007f696d801f80  0x00007f696da5b01e  Yes (*)     /usr/lib/x86_64-linux-gnu/libgtk-x11-2.0.so.0
+0x00007f696d554610  0x00007f696d5812f8  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libgobject-2.0.so.0
+0x00007f696d252ac0  0x00007f696d2c8b58  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libglib-2.0.so.0
+0x00007f696cf31110  0x00007f696cfe72e0  Yes (*)     /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+0x00007f696ccfda30  0x00007f696cd0aa51  Yes         /lib/x86_64-linux-gnu/libpthread.so.0
+0x00007f696caf2100  0x00007f696caf51df  Yes         /lib/x86_64-linux-gnu/librt.so.1
+0x00007f696c8d9fa0  0x00007f696c8e7e38  Yes (*)     /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libz.so.1
+0x00007f696c69c6c0  0x00007f696c6c9d58  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libjpeg.so.9
+0x00007f696c4893c0  0x00007f696c495092  Yes (*)     /lib/x86_64-linux-gnu/libbz2.so.1.0
+0x00007f696c26fcf0  0x00007f696c27e9bf  Yes (*)     /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.58.0
+0x00007f696c058ff0  0x00007f696c059c66  Yes (*)     /usr/lib/x86_64-linux-gnu/libboost_system.so.1.58.0
+0x00007f696be50da0  0x00007f696be5198e  Yes         /lib/x86_64-linux-gnu/libdl.so.2
+0x00007f696bb19b50  0x00007f696bbbe2d8  Yes (*)     /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libstdc++.so.6
+0x00007f696b785600  0x00007f696b7f6d0a  Yes         /lib/x86_64-linux-gnu/libm.so.6
+0x00007f696b56aa50  0x00007f696b57a7b8  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libgcc_s.so.1
+0x00007f696b1b78b0  0x00007f696b30aac4  Yes         /lib/x86_64-linux-gnu/libc.so.6
+0x00007f696aefd950  0x00007f696af5475b  Yes (*)     /usr/lib/x86_64-linux-gnu/libgdk-x11-2.0.so.0
+0x00007f696acd9150  0x00007f696acda038  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libgmodule-2.0.so.0
+0x00007f696aacc980  0x00007f696aad1746  Yes (*)     /usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0
+0x00007f696a7a0870  0x00007f696a8282e4  Yes (*)     /usr/lib/x86_64-linux-gnu/libX11.so.6
+0x00007f696a581530  0x00007f696a583756  Yes (*)     /usr/lib/x86_64-linux-gnu/libXfixes.so.3
+0x00007f696a362780  0x00007f696a36ebc3  Yes (*)     /usr/lib/x86_64-linux-gnu/libatk-1.0.so.0
+0x00007f696a051c40  0x00007f696a113897  Yes (*)     /usr/lib/x86_64-linux-gnu/libcairo.so.2
+0x00007f6969e1e0b0  0x00007f6969e309f9  Yes (*)     /usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0
+0x00007f6969ab9fd0  0x00007f6969b9cb88  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libgio-2.0.so.0
+0x00007f69698671f0  0x00007f696986f87d  Yes (*)     /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0
+0x00007f696961cff0  0x00007f696963c396  Yes (*)     /usr/lib/x86_64-linux-gnu/libpango-1.0.so.0
+0x00007f69693cea20  0x00007f69693ee078  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libfontconfig.so.1
+0x00007f69691813c0  0x00007f69691aaef8  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/./libpcre.so.1
+0x00007f6968f71890  0x00007f6968f76d78  Yes (*)     /home/zekun/anaconda3/envs/tensorflow-gpu/lib/./libffi.so.6
+0x00007f6968c9aaa0  0x00007f6968d2ab02  Yes (*)     /usr/lib/x86_64-linux-gnu/libasound.so.2
+0x00007f6968a2bb20  0x00007f6968a58b59  Yes (*)     /usr/lib/x86_64-linux-gnu/libpulse.so.0
+0x00007f6968812be0  0x00007f6968819347  Yes (*)     /usr/lib/x86_64-linux-gnu/libsndio.so.6.1
+0x00007f69685fb590  0x00007f696860539f  Yes (*)     /usr/lib/x86_64-linux-gnu/libXext.so.6
+0x00007f69683ea3e0  0x00007f69683eefd7  Yes (*)     /usr/lib/x86_64-linux-gnu/libXcursor.so.1
+0x00007f69681e0af0  0x00007f69681e13ec  Yes (*)     /usr/lib/x86_64-linux-gnu/libXinerama.so.1
+0x00007f6967fd21a0  0x00007f6967fdc6f7  Yes (*)     /usr/lib/x86_64-linux-gnu/libXi.so.6
+0x00007f6967dc1c70  0x00007f6967dc7a82  Yes (*)     /usr/lib/x86_64-linux-gnu/libXrandr.so.2
+0x00007f6967bb8cd0  0x00007f6967bb9a8c  Yes (*)     /usr/lib/x86_64-linux-gnu/libXss.so.1
+0x00007f69679b0fc0  0x00007f69679b38c8  Yes (*)     /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1
+0x00007f69677a86a0  0x00007f69677a8896  Yes (*)     /usr/lib/x86_64-linux-gnu/libwayland-egl.so.1
+0x00007f696759d180  0x00007f69675a19ff  Yes (*)     /usr/lib/x86_64-linux-gnu/libwayland-client.so.0
+0x00007f6967391200  0x00007f6967392d71  Yes (*)     /usr/lib/x86_64-linux-gnu/libwayland-cursor.so.0
+0x00007f6967153e70  0x00007f696716e895  Yes (*)     /usr/lib/x86_64-linux-gnu/libxkbcommon.so.0
+0x00007f696dde8ac0  0x00007f696de06810  Yes         /lib64/ld-linux-x86-64.so.2
+0x00007f6966f41ad0  0x00007f6966f479e5  Yes (*)     /usr/lib/x86_64-linux-gnu/libXrender.so.1
+0x00007f6966d38c40  0x00007f6966d39618  Yes (*)     /usr/lib/x86_64-linux-gnu/libXcomposite.so.1
+0x00007f6966b30b90  0x00007f6966b3149b  Yes (*)     /usr/lib/x86_64-linux-gnu/libXdamage.so.1
+0x00007f696689dbe0  0x00007f6966901ca8  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libfreetype.so.6
+0x00007f6966673920  0x00007f6966683458  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libxcb.so.1
+0x00007f69663c9be0  0x00007f696644eb30  Yes (*)     /usr/lib/x86_64-linux-gnu/libpixman-1.so.0
+0x00007f696619ba70  0x00007f69661b4373  Yes (*)     /lib/x86_64-linux-gnu/libpng12.so.0
+0x00007f6965f90d00  0x00007f6965f91618  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libxcb-shm.so.0
+0x00007f6965d85000  0x00007f6965d89598  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libxcb-render.so.0
+0x00007f6965b5dab0  0x00007f6965b7029b  Yes (*)     /lib/x86_64-linux-gnu/libselinux.so.1
+0x00007f696593b950  0x00007f696594b2b8  Yes         /lib/x86_64-linux-gnu/libresolv.so.2
+0x00007f69656de650  0x00007f6965719519  Yes (*)     /usr/lib/x86_64-linux-gnu/libharfbuzz.so.0
+0x00007f69654c9b90  0x00007f69654cd455  Yes (*)     /usr/lib/x86_64-linux-gnu/libthai.so.0
+0x00007f6965196100  0x00007f6965278e38  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/./libxml2.so.2
+0x00007f6964e7a3d0  0x00007f6964e98ea8  Yes (*)     /home/zekun/anaconda3/envs/tensorflow-gpu/lib/./libiconv.so.2
+0x00007f6964c6a800  0x00007f6964c6f612  Yes (*)     /lib/x86_64-linux-gnu/libjson-c.so.2
+0x00007f69649f9e70  0x00007f6964a3c899  Yes (*)     /usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-8.0.so
+0x00007f69647a60e0  0x00007f69647cefb8  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/libdbus-1.so.3
+0x00007f6964583400  0x00007f696459061f  Yes (*)     /lib/x86_64-linux-gnu/libbsd.so.0
+0x00007f6964378e50  0x00007f6964379acc  Yes (*)     /usr/lib/x86_64-linux-gnu/libXau.so.6
+0x00007f6964109530  0x00007f6964158623  Yes (*)     /lib/x86_64-linux-gnu/libpcre.so.3
+0x00007f6963ee2490  0x00007f6963efe065  Yes (*)     /usr/lib/x86_64-linux-gnu/libgraphite2.so.3
+0x00007f6963cd9130  0x00007f6963cdc5bd  Yes (*)     /usr/lib/x86_64-linux-gnu/libdatrie.so.1
+0x00007f696df54810  0x00007f696dfabb4f  Yes (*)     /lib/x86_64-linux-gnu/libsystemd.so.0
+0x00007f6963acad70  0x00007f6963ace798  Yes (*)     /lib/x86_64-linux-gnu/libwrap.so.0
+0x00007f696385e0d0  0x00007f69638a054c  Yes (*)     /usr/lib/x86_64-linux-gnu/libsndfile.so.1
+0x00007f6963651300  0x00007f6963653988  Yes (*)     /usr/lib/x86_64-linux-gnu/libasyncns.so.0
+0x00007f696342b0e0  0x00007f6963441c38  Yes         /home/zekun/anaconda3/envs/tensorflow-gpu/lib/liblzma.so.5
+0x00007f6963148d00  0x00007f69631e9548  Yes (*)     /lib/x86_64-linux-gnu/libgcrypt.so.20
+0x00007f6962f23ff0  0x00007f6962f311e1  Yes         /lib/x86_64-linux-gnu/libnsl.so.1
+0x00007f6962cb0420  0x00007f6962d11cfd  Yes (*)     /usr/lib/x86_64-linux-gnu/libFLAC.so.8
+0x00007f6962a0ba60  0x00007f6962a0e1a7  Yes (*)     /usr/lib/x86_64-linux-gnu/libvorbisenc.so.2
+0x00007f69627e28d0  0x00007f69627ebdb9  Yes (*)     /lib/x86_64-linux-gnu/libgpg-error.so.0
+0x00007f69625d1a70  0x00007f69625d5c05  Yes (*)     /usr/lib/x86_64-linux-gnu/libogg.so.0
+0x00007f69623a2da0  0x00007f69623b900d  Yes (*)     /usr/lib/x86_64-linux-gnu/libvorbis.so.0
+0x00007f6961cfcc10  0x00007f6961d06a17  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/liboverlay-scrollbar.so
+0x00007f6961ab7670  0x00007f6961ae0887  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libgail.so
+0x00007f69618a2900  0x00007f69618a5f81  Yes (*)     /usr/lib/x86_64-linux-gnu/libgailutil.so.18
+0x00007f6961698800  0x00007f6961698965  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libatk-bridge.so
+0x00007f6961472730  0x00007f6961486929  Yes (*)     /usr/lib/x86_64-linux-gnu/libatk-bridge-2.0.so.0
+0x00007f6961245ee0  0x00007f6961257768  Yes (*)     /usr/lib/x86_64-linux-gnu/libatspi.so.0
+0x00007f69610321f0  0x00007f6961033a2c  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libunity-gtk-module.so
+0x00007f6960e1c170  0x00007f6960e24392  Yes (*)     /usr/lib/x86_64-linux-gnu/libunity-gtk2-parser.so.0
+0x00007f6960be56b0  0x00007f6960c0a27c  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-2.0/2.10.0/engines/libmurrine.so
+0x00007f69609da0f0  0x00007f69609dc020  Yes (*)     /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so
+0x00007f69607d1c10  0x00007f69607d319e  Yes (*)     /usr/lib/x86_64-linux-gnu/libcanberra-gtk.so.0
+0x00007f69605baba0  0x00007f69605c412a  Yes (*)     /usr/lib/x86_64-linux-gnu/libcanberra.so.0
+0x00007f69603a9d50  0x00007f69603ae13c  Yes (*)     /usr/lib/x86_64-linux-gnu/libvorbisfile.so.3
+0x00007f6960192cf0  0x00007f696019e1a3  Yes (*)     /usr/lib/x86_64-linux-gnu/libtdb.so.1
+0x00007f695ff81ed0  0x00007f695ff861e2  Yes (*)     /usr/lib/x86_64-linux-gnu/libltdl.so.7
+0x00007f696deac720  0x00007f696debde9a  Yes (*)     /lib/x86_64-linux-gnu/libudev.so.1
+0x00007f695f512ee0  0x00007f695f554825  Yes (*)     /usr/lib/x86_64-linux-gnu/libopenal.so
+(*): Shared library is missing debugging information.
+
+* Threads
+  Id   Target Id         Frame 
+* 1    Thread 0x7f696df3ea40 (LWP 15404) "vizdoom" 0x00007f696cd08f7b in __waitpid (pid=17353, stat_loc=0xbeacac, options=0) at ../sysdeps/unix/sysv/linux/waitpid.c:29
+  2    Thread 0x7f695ff7f700 (LWP 15405) "SDLTimer" 0x00007f696cd07827 in futex_abstimed_wait_cancelable (private=0, abstime=0x0, expected=0, futex_word=0x2c5b7b0) at ../sysdeps/unix/sysv/linux/futex-internal.h:205
+
+* FPU Status
+  R7: Empty   0x00000000000000000000
+  R6: Empty   0x00000000000000000000
+  R5: Empty   0x00000000000000000000
+  R4: Empty   0x00000000000000000000
+  R3: Empty   0x00000000000000000000
+  R2: Empty   0x00000000000000000000
+  R1: Empty   0x00000000000000000000
+=>R0: Empty   0x00000000000000000000
+
+Status Word:         0x0000                                            
+                       TOP: 0
+Control Word:        0x037f   IM DM ZM OM UM PM
+                       PC: Extended Precision (64-bits)
+                       RC: Round to nearest
+Tag Word:            0xffff
+Instruction Pointer: 0x00:0x00000000
+Operand Pointer:     0x00:0x00000000
+Opcode:              0x0000
+
+* Registers
+rax            0xfffffffffffffe00	-512
+rbx            0x43c9	17353
+rcx            0x7f696cd08f7b	140090773901179
+rdx            0x0	0
+rsi            0xbeacac	12496044
+rdi            0x43c9	17353
+rbp            0xbeacac	0xbeacac
+rsp            0xbeac70	0xbeac70
+r8             0x0	0
+r9             0x7f696df3ea40	140090792995392
+r10            0x0	0
+r11            0x246	582
+r12            0x0	0
+r13            0x1090	4240
+r14            0xbe8180	12484992
+r15            0x10	16
+rip            0x7f696cd08f7b	0x7f696cd08f7b <__waitpid+107>
+eflags         0x246	[ PF ZF IF ]
+cs             0x33	51
+ss             0x2b	43
+ds             0x0	0
+es             0x0	0
+fs             0x0	0
+gs             0x0	0
+
+* Backtrace
+
+Thread 2 (Thread 0x7f695ff7f700 (LWP 15405)):
+#0  0x00007f696cd07827 in futex_abstimed_wait_cancelable (private=0, abstime=0x0, expected=0, futex_word=0x2c5b7b0) at ../sysdeps/unix/sysv/linux/futex-internal.h:205
+        __ret = -512
+        oldtype = 2
+        err = <optimized out>
+#1  do_futex_wait (sem=sem@entry=0x2c5b7b0, abstime=0x0) at sem_waitcommon.c:111
+No locals.
+#2  0x00007f696cd078d4 in __new_sem_wait_slow (sem=0x2c5b7b0, abstime=0x0) at sem_waitcommon.c:181
+        _buffer = {__routine = 0x7f696cd077e0 <__sem_wait_cleanup>, __arg = 0x2c5b7b0, __canceltype = 0, __prev = 0x0}
+        err = <optimized out>
+        d = 0
+#3  0x00007f696cd0797a in __new_sem_wait (sem=<optimized out>) at sem_wait.c:29
+No locals.
+#4  0x00007f696cfe16ce in ?? () from /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+No symbol table info available.
+#5  0x00007f696cfe1825 in ?? () from /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+No symbol table info available.
+#6  0x00007f696cf93503 in ?? () from /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+No symbol table info available.
+#7  0x00007f696cf9309c in ?? () from /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+No symbol table info available.
+#8  0x00007f696cfe1399 in ?? () from /usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0
+No symbol table info available.
+#9  0x00007f696ccff6ba in start_thread (arg=0x7f695ff7f700) at pthread_create.c:333
+        __res = <optimized out>
+        pd = 0x7f695ff7f700
+        now = <optimized out>
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {140090558379776, -4074805846199544394, 0, 140730336010479, 140090558380480, 140730336011136, 4152844714126038454, 4152802864830174646}, mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0x0, 0x0}, data = {prev = 0x0, cleanup = 0x0, canceltype = 0}}}
+        not_first_call = <optimized out>
+        pagesize_m1 = <optimized out>
+        sp = <optimized out>
+        freesize = <optimized out>
+        __PRETTY_FUNCTION__ = "start_thread"
+#10 0x00007f696b29f3dd in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
+No locals.
+
+Thread 1 (Thread 0x7f696df3ea40 (LWP 15404)):
+#0  0x00007f696cd08f7b in __waitpid (pid=17353, stat_loc=0xbeacac, options=0) at ../sysdeps/unix/sysv/linux/waitpid.c:29
+        resultvar = 18446744073709551104
+        sc_cancel_oldtype = 0
+#1  0x000000000051caa4 in ?? ()
+No symbol table info available.
+#2  <signal handler called>
+No locals.
+#3  0x0000000000572aeb in GC::PropagateMark() ()
+No symbol table info available.
+#4  0x0000000000573382 in GC::Step() ()
+No symbol table info available.
+#5  0x0000000000576453 in DThinker::TickThinkers(FThinkerList*, FThinkerList*) ()
+No symbol table info available.
+#6  0x0000000000576556 in DThinker::RunThinkers() ()
+No symbol table info available.
+#7  0x000000000064f610 in P_Ticker() ()
+No symbol table info available.
+#8  0x0000000000587604 in G_Ticker() ()
+No symbol table info available.
+#9  0x000000000055e316 in TryRunTics() ()
+No symbol table info available.
+#10 0x000000000055502b in D_DoomLoop() ()
+No symbol table info available.
+#11 0x000000000055743a in D_DoomMain() ()
+No symbol table info available.
+#12 0x00000000005043c8 in main ()
+No symbol table info available.
