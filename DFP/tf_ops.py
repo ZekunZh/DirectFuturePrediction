@@ -2,6 +2,7 @@ import math
 import numpy as np 
 import tensorflow as tf
 from .vgg19 import VGG19
+from .resnet import ResNet50
 
 def msra_stddev(x, k_h, k_w): 
     return 1/math.sqrt(0.5*k_w*k_h*x.get_shape().as_list()[-1])
@@ -46,7 +47,10 @@ def conv_encoder(data, params, name, msra_coeff=1):
         else:
             curr_inp = layers[-1]
             
-        layers.append(lrelu(conv2d(curr_inp, param['out_channels'], k_h=param['kernel'], k_w=param['kernel'], d_h=param['stride'], d_w=param['stride'], name=name + str(nl), msra_coeff=msra_coeff)))
+        layers.append(lrelu(conv2d(curr_inp, param['out_channels'], 
+                                    k_h=param['kernel'], k_w=param['kernel'], 
+                                    d_h=param['stride'], d_w=param['stride'], 
+                                    name=name + str(nl), msra_coeff=msra_coeff)))
         
     return layers[-1]
         
@@ -77,5 +81,14 @@ def flatten(data):
 ###############################################
 def vgg19(input_):
     input_shape = input_.get_shape()
+    print(input_shape)
     vgg = VGG19(image_shape=input_shape, input_tensor=input_)
-    return tf.identity(vgg['block5_pool'], name='vgg19_output')
+    return tf.identity(vgg['block1_pool'], name='vgg19_output')
+
+###############################################
+# ResNet block
+###############################################
+def resnet(input_):
+    input_shape = input_.get_shape()
+    resnet = ResNet50(image_shape=input_shape, input_tensor=input_)
+    return tf.identity(resnet['add_32'], name='resnet_output')
