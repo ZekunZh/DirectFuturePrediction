@@ -386,7 +386,7 @@ class Agent:
             #self.writer.add_summary(tf_avg_meas_summary[0], self.curr_step)
             
             tf_avg_rwrd = tf.placeholder(tf.float32, total_avg_rwrd.shape)
-            tf_avg_rwrd_sum = tf.scalar_summary("test_avg_rwrd", tf_avg_rwrd)
+            tf_avg_rwrd_sum = tf.summary.scalar("test_avg_rwrd", tf_avg_rwrd)
             tf_avg_rwrd_summary = self.sess.run([tf_avg_rwrd_sum], 
                                                 feed_dict = {tf_avg_rwrd: total_avg_rwrd})
             self.writer.add_summary(tf_avg_rwrd_summary[0], self.curr_step)

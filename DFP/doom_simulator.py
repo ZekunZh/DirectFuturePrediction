@@ -6,8 +6,8 @@ import sys
 import os
 import logging
 
-vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
-# vizdoom_path = '/home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30'
+# vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
+vizdoom_path = '/home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30'
 # sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
 sys.path = [vizdoom_path] + sys.path
 
