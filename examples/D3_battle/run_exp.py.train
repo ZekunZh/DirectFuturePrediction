@@ -87,7 +87,7 @@ def main(main_args):
 	# directories		
 	agent_args['checkpoint_dir'] = 'checkpoints'
 	agent_args['log_dir'] = 'logs'
-	agent_args['init_model'] = 'checkpoints/2018_01_12_20_42_46'
+	agent_args['init_model'] = 'checkpoints/2018_01_13_09_55_01-add-infos'
 	agent_args['model_name'] = "predictor.model"
 	agent_args['model_dir'] = time.strftime("%Y_%m_%d_%H_%M_%S")		
 	

@@ -87,7 +87,7 @@ def main(main_args):
 	# directories		
 	agent_args['checkpoint_dir'] = 'checkpoints'
 	agent_args['log_dir'] = 'logs'
-	agent_args['init_model'] = 'checkpoints/2018_01_13_09_55_01-add-infos'
+	agent_args['init_model'] = ''
 	agent_args['model_name'] = "predictor.model"
 	agent_args['model_dir'] = time.strftime("%Y_%m_%d_%H_%M_%S")		
 	
@@ -108,7 +108,7 @@ def main(main_args):
 	experiment_args['test_objective_coeffs_temporal'] = np.array([0., 0., 0., 0.5, 0.5, 1.])
 	experiment_args['test_objective_coeffs_meas'] = np.array([0.5,0.5,1.])
 	experiment_args['test_random_prob'] = 0.
-	experiment_args['test_checkpoint'] = 'checkpoints/2017_04_08_10_44_20'
+	experiment_args['test_checkpoint'] = 'checkpoints/2018_01_12_18_07_27'
 	experiment_args['test_policy_num_steps'] = 2000
 	experiment_args['show_predictions'] = False
 	experiment_args['multiplayer'] = False
