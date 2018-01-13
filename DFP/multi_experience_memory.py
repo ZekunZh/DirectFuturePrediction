@@ -10,6 +10,7 @@ from matplotlib import gridspec
 import time
 import os
 from . import util as my_util
+import pdb
 
 class MultiExperienceMemory:
 
@@ -53,7 +54,14 @@ class MultiExperienceMemory:
         self._curr_indices = np.arange(self.num_heads) * int(self.head_offset)
         self._episode_counts = np.zeros(self.num_heads)
 
-
+    def add_human(self, mem_dir):
+        memory = np.load(mem_dir).item()
+        num_data = len(memory['img'])
+        for i in xrange(num_data/self.num_heads):
+            i *= self.num_heads
+            self.add(memory['img'][i:i+self.num_heads], memory['meas'][i:i+self.num_heads],
+                     memory['reward'][i:i+self.num_heads], [False]*self.num_heads, memory['action'][i:i+self.num_heads])            
+        
     def add(self, imgs, meass, rwrds, terms, acts, objs=None, preds=None):
         ''' Add experience to dataset.
 
@@ -66,6 +74,10 @@ class MultiExperienceMemory:
         '''
 
         self._images[self._curr_indices] = imgs
+        #print('==> check len indices {} len meass {}'.format(len(self._curr_indices), len(meass)))
+        #print('==> check elment shape', self._measurements[self._curr_indices[0]].shape)
+        #print('==> check meas shape', meass[0].shape)
+        
         self._measurements[self._curr_indices] = meass
         self._rewards[self._curr_indices] = rwrds
         self._terminals[self._curr_indices] = terms
@@ -142,7 +154,7 @@ class MultiExperienceMemory:
                 start_time = time.time()
 
             curr_act = actor.act_with_multi_memory(self)
-            
+            #pdb.set_trace()
             # actor has to return a np array of bools
             invalid_states = np.logical_not(np.array(self.curr_states_with_valid_history()))
             if actor.random_objective_coeffs:

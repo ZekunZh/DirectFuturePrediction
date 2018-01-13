@@ -5,7 +5,7 @@ from __future__ import print_function
 import sys
 import os
 
-vizdoom_path = '../../../../toolboxes/ViZDoom_2017_03_31'
+vizdoom_path = '/home/mingxing/Projects/Computer_Vision/ViZDoom'
 sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
 
 import vizdoom 
@@ -15,6 +15,11 @@ import time
 import numpy as np
 import re
 import cv2
+import pdb
+from add_info import dist_info
+
+#additional_info = 7
+additional_info = -1
 
 class DoomSimulator:
     
@@ -34,6 +39,8 @@ class DoomSimulator:
         self._game.add_game_args(self.game_args)
         self.curr_map = 0
         self._game.set_doom_map(self.maps[self.curr_map])
+        ########## Mingxing
+        self._game.set_labels_buffer_enabled(True)
         
         # set resolution
         try:
@@ -59,7 +66,7 @@ class DoomSimulator:
         self.num_buttons = self._game.get_available_buttons_size()
         assert(self.num_buttons == len(self.discrete_controls) + len(self.continuous_controls))
         assert(len(self.continuous_controls) == 0) # only discrete for now
-        self.num_meas = self._game.get_available_game_variables_size()
+        self.num_meas = self._game.get_available_game_variables_size() + additional_info
             
         self.meas_tags = []
         for nm in range(self.num_meas):
@@ -128,7 +135,9 @@ class DoomSimulator:
             else:
                 img = raw_img
                 
-            meas = state.game_variables # this is a numpy array of game variables specified by the scenario
+            meas = state.game_variables[:-1] # this is a numpy array of game variables specified by the scenario
+            #meas = np.append(meas, dist_info(state.labels, state.game_variables[-1]))
+            #pdb.set_trace()
             
         term = self._game.is_episode_finished() or self._game.is_player_dead()
         
@@ -136,7 +145,9 @@ class DoomSimulator:
             self.new_episode() # in multiplayer multi_simulator takes care of this            
             img = np.zeros((self.num_channels, self.resolution[1], self.resolution[0]), dtype=np.uint8) # should ideally put nan here, but since it's an int...
             meas = np.zeros(self.num_meas, dtype=np.uint32) # should ideally put nan here, but since it's an int...
-            
+        
+        
+        
         return img, meas, rwrd, term
     
     def get_random_action(self):

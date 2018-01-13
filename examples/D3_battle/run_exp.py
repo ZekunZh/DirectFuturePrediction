@@ -63,7 +63,8 @@ def main(main_args):
 	# agent properties
 	agent_args['objective_coeffs_temporal'] = [0., 0. ,0. ,0.5, 0.5, 1.]
 	agent_args['objective_coeffs_meas'] = [0.5, 0.5, 1.]
-	agent_args['random_exploration_schedule'] = lambda step: (0.02 + 145000. / (float(step) + 150000.))
+	agent_args['random_exploration_schedule'] = lambda step: (0.02 + 10000. / (float(step)*0.5 + 15000.))
+    #agent_args['random_exploration_schedule'] = lambda step: (145.0/(step+150)) lambda step: (0.02 + 145000. / (float(step) + 150000.))
 	agent_args['new_memories_per_batch'] = 8
 	
 	# net parameters
@@ -108,7 +109,7 @@ def main(main_args):
 	experiment_args['test_objective_coeffs_temporal'] = np.array([0., 0., 0., 0.5, 0.5, 1.])
 	experiment_args['test_objective_coeffs_meas'] = np.array([0.5,0.5,1.])
 	experiment_args['test_random_prob'] = 0.
-	experiment_args['test_checkpoint'] = 'checkpoints/2017_04_08_10_44_20'
+	experiment_args['test_checkpoint'] = 'checkpoints/2018_01_12_18_07_27'
 	experiment_args['test_policy_num_steps'] = 2000
 	experiment_args['show_predictions'] = False
 	experiment_args['multiplayer'] = False

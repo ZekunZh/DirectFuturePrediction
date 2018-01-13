@@ -7,7 +7,7 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 import time
-
+import pdb
 
 class FutureTargetMaker:
 
@@ -62,6 +62,7 @@ class FutureTargetMaker:
         '''
         capacity = meas.shape[0]
         targets = np.zeros((len(indices), self.num_targets, len(self.future_steps)), dtype='float32')
+        #pdb.set_trace()
         for ns, sample in enumerate(indices):
             # measurement targets
             curr_future_steps = (sample + self.future_steps) % capacity

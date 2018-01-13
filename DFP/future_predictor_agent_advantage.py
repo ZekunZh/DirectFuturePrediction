@@ -9,6 +9,7 @@ from . import tf_ops as my_ops
 import os
 import re
 from .agent import Agent
+import pdb
 
 class FuturePredictorAgentAdvantage(Agent):
     
@@ -47,7 +48,7 @@ class FuturePredictorAgentAdvantage(Agent):
         
         per_target_loss = my_ops.mse_ignore_nans(pred_relevant, targets_preprocessed, reduction_indices=0)
         loss = tf.reduce_sum(per_target_loss)
-        
+
         # compute objective value, just for logging purposes
         # TODO add multiplication by the objective_coeffs (somehow not trivial)
         obj = tf.reduce_sum(self.postprocess_predictions(targets_preprocessed), 1)
@@ -82,10 +83,11 @@ class FuturePredictorAgentAdvantage(Agent):
         predictions = self.sess.run(self.pred_all, feed_dict={self.input_images: state_imgs, 
                                                               self.input_measurements: state_meas,
                                                               self.input_objective_coeffs: curr_objective_coeffs})
-        
+
         self.curr_predictions = predictions[:,:,self.objective_indices]*curr_objective_coeffs[:,None,:]
         self.curr_objectives = np.sum(self.curr_predictions, axis=2)
         
         curr_action = np.argmax(self.curr_objectives, axis=1)
+ 
         return curr_action
         

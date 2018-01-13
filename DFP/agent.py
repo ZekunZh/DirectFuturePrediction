@@ -10,6 +10,7 @@ import os
 import re
 import itertools as it
 from . import util as my_util
+import pdb
 
 class Agent:
 
@@ -158,7 +159,7 @@ class Agent:
                                     name='input_actions')
         self.input_objective_coeffs = tf.placeholder(tf.float32, [None] + list(self.obj_shape),
                                     name='input_objective_coeffs')
-        
+
         if self.preprocess_input_images:
             self.input_images_preprocessed = self.preprocess_input_images(self.input_images)
         if self.preprocess_input_measurements:
@@ -277,6 +278,7 @@ class Agent:
             if np.random.rand() < self.random_prob:
                 self.curr_predictions = None
                 curr_act = self.agent.random_actions(multi_memory.num_heads)
+                print('Check < prob {}'.format(self.random_prob))
             else:
                 state_imgs, state_meas = multi_memory.get_current_state()
                 curr_act = self.agent.act(state_imgs, state_meas, self.objective_coeffs)
@@ -293,6 +295,7 @@ class Agent:
     
     def train_one_batch(self, experience):
         state_imgs, state_meas, rwrds, terms, acts, targs, objs = experience.get_random_batch(self.batch_size)
+        #pdb.set_trace()
         acts = self.preprocess_actions(acts)
         res = self.sess.run([self.tf_minim, self.short_summary, self.detailed_summary] + self.errs_to_print,
                         feed_dict={ self.input_images: state_imgs, \
@@ -345,10 +348,12 @@ class Agent:
         self.train_actor = self.get_actor(objective_coeffs=self.objective_coeffs, 
                                           random_prob=self.random_exploration_schedule(self.curr_step),random_objective_coeffs=self.random_objective_coeffs)
         
-        print('Filling the training memory')
-        experience.add_n_steps_with_actor(simulator, 
-                                          experience.capacity / simulator.num_simulators, 
-                                          self.train_actor, verbose=True)               
+#        print('Filling the training memory')
+#        experience.add_n_steps_with_actor(simulator, 
+#                                          experience.capacity / (2*simulator.num_simulators), 
+#                                          self.train_actor, verbose=True)           
+        print('Filling the training memory with human memory')
+        experience.add_human('./memory.npy')
         
         for _ in range(num_steps):
             if np.mod(self.curr_step, self.checkpoint_every) == 0:
@@ -363,7 +368,7 @@ class Agent:
                 experience.add_n_steps_with_actor(simulator, 
                                                 self.new_memories_per_batch, 
                                                 self.train_actor)
-    
+                
     def test_policy(self, simulator, experience, objective_coeffs, num_steps, random_prob=0., write_summary=False, write_predictions=False):
         print('== Testing the policy ==')
         old_head_offset = experience.head_offset

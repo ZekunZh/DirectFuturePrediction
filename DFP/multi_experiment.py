@@ -117,7 +117,7 @@ class MultiExperiment:
             self.train_experience.head_offset = self.test_policy_num_steps + 1
             self.train_experience.log_prefix = 'logs/log_test'
             self.ag.test_policy(self.multi_simulator, self.train_experience, self.test_objective_coeffs, self.test_policy_num_steps, random_prob = self.test_random_prob, write_summary=False, write_predictions=True)
-            self.train_experience.show(start_index=0, end_index=self.test_policy_num_steps * self.multi_simulator.num_simulators, display=True, write_imgs=False, 
+            self.train_experience.show(start_index=0, end_index=self.test_policy_num_steps * self.multi_simulator.num_simulators, display=True, write_imgs=False, write_video = True,
                                        preprocess_targets = self.ag.preprocess_input_targets, show_predictions=self.num_predictions_to_show, net_discrete_actions = self.ag.net_discrete_actions)
         elif mode == 'train':
             self.test_policy_experience.log_prefix = 'logs/log'
