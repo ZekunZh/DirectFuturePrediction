@@ -10,6 +10,7 @@ from matplotlib import gridspec
 import time
 import os
 from . import util as my_util
+import logging
 
 class MultiExperienceMemory:
 
@@ -31,7 +32,12 @@ class MultiExperienceMemory:
         self.target_maker = target_maker
         self.head_offset = int(self.capacity/self.num_heads)
         
-        self.img_shape = (multi_simulator.num_channels, multi_simulator.resolution[1], multi_simulator.resolution[0])
+        #####################################################
+        # Input image features ResNet(1 x 1 x 2048)
+        #####################################################
+        # self.img_shape = (1, 1, 2048)
+        self.img_shape = (1, multi_simulator.resolution[0], multi_simulator.resolution[1])
+
         self.meas_shape = (multi_simulator.num_meas,)
         self.action_shape = (multi_simulator.action_len,)
         self.state_imgs_shape = (self.history_length*self.img_shape[0],) +  self.img_shape[1:]
@@ -64,7 +70,8 @@ class MultiExperienceMemory:
             term: terminal state
             act: action taken
         '''
-
+        # logging.info("self._images shape: " + str(self._images.shape))
+        # logging.info("imgs shape: " + str(imgs[0].shape))
         self._images[self._curr_indices] = imgs
         self._measurements[self._curr_indices] = meass
         self._rewards[self._curr_indices] = rwrds

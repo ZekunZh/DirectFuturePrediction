@@ -22,14 +22,14 @@ def main(main_args):
     ## Simulator
     simulator_args = {}
     simulator_args['config'] = '../../maps/D3_battle.cfg'
-    simulator_args['resolution'] = (224,224)
+    simulator_args['resolution'] = (1,2048)
     simulator_args['frame_skip'] = 4
     simulator_args['color_mode'] = 'RGB'
     simulator_args['use_shaping_reward'] = False
     simulator_args['maps'] = ['MAP01']
     simulator_args['switch_maps'] = False
     #train
-    simulator_args['num_simulators'] = 8
+    simulator_args['num_simulators'] = 2
     
     ## Experience
     # Train experience
@@ -96,7 +96,7 @@ def main(main_args):
     agent_args['print_err_every'] = 50
     agent_args['detailed_summary_every'] = 1000
     agent_args['test_pred_every'] = 0
-    agent_args['test_policy_every'] = 500
+    agent_args['test_policy_every'] = 7812
     agent_args['num_batches_per_pred_test'] = 0
     agent_args['num_steps_per_policy_test'] = test_policy_experience_args['memory_capacity'] / simulator_args['num_simulators']
     agent_args['checkpoint_every'] = 10000

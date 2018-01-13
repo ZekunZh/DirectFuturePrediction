@@ -5,9 +5,13 @@ from __future__ import print_function
 import sys
 import os
 import logging
+import numpy as np
+import tensorflow as tf
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input
 
-# vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
-vizdoom_path = '/home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30'
+vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
+# vizdoom_path = '/home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30'
 # sys.path = [os.path.join(vizdoom_path,'bin/python3')] + sys.path
 sys.path = [vizdoom_path] + sys.path
 
@@ -33,10 +37,10 @@ class DoomSimulator:
         self.game_args = args['game_args']
         
         self._game = vizdoom.DoomGame()
-        self._game.set_vizdoom_path(os.path.join(vizdoom_path,'bin/vizdoom'))
-        self._game.set_doom_game_path(os.path.join(vizdoom_path,'bin/freedoom2.wad'))
-        # self._game.set_vizdoom_path(os.path.join(vizdoom_path,'vizdoom'))
-        # self._game.set_doom_game_path(os.path.join(vizdoom_path,'freedoom2.wad'))
+        # self._game.set_vizdoom_path(os.path.join(vizdoom_path,'bin/vizdoom'))
+        # self._game.set_doom_game_path(os.path.join(vizdoom_path,'bin/freedoom2.wad'))
+        self._game.set_vizdoom_path(os.path.join(vizdoom_path,'vizdoom'))
+        self._game.set_doom_game_path(os.path.join(vizdoom_path,'freedoom2.wad'))
         self._game.load_config(self.config)
         self._game.add_game_args(self.game_args)
         self.curr_map = 0
@@ -54,7 +58,10 @@ class DoomSimulator:
         # set color mode
         if self.color_mode == 'RGB':
             self._game.set_screen_format(vizdoom.ScreenFormat.CRCGCB)
-            self.num_channels = 3
+            #####################################################
+            # Note that after ConvNet, channel = 1 - Zekun
+            #####################################################
+            self.num_channels = 1
         elif self.color_mode == 'GRAY':
             self._game.set_screen_format(vizdoom.ScreenFormat.GRAY8)
             self.num_channels = 1
@@ -74,6 +81,14 @@ class DoomSimulator:
             
         self.episode_count = 0
         self.game_initialized = False
+
+        #####################################################
+        # Initialize ConvNet for preprocessing - Zekun
+        #####################################################
+        # convNets = Model(inputs=resnet.input, outputs=resnet.get_layer('activation_49').output)
+        # self.convNets = Model(inputs=base_model.input, outputs=base_model.get_layer('activation_49').output)
+        self.convNets = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
+        logging.info("ConvNets initialized...")
         
     def analyze_controls(self, config_file):
         with open(config_file, 'r') as myfile:
@@ -125,7 +140,7 @@ class DoomSimulator:
                 raw_img = np.expand_dims(state.screen_buffer,0)
                 
             if self.resize:
-                if self.num_channels == 1:
+                if self.color_mode == 'GRAY':
                     if raw_img is None:
                         img = None
                     else:
@@ -136,28 +151,29 @@ class DoomSimulator:
                         # img shape: (1 x resolution[0] x resolution[1])
                         img = cv2.resize(raw_img[0], (self.resolution[0], self.resolution[1]))[None,:,:]
                         # logging.info("image shape: " + str(img.shape))
-                else:
+                elif self.color_mode == 'RGB':
                     if raw_img is None:
                         img = None
                     else:
                         # transform raw_img:  
                         # (channel x height x width) -> (height x width x channel)
                         raw_img = np.rollaxis(raw_img, 0, 3)
-                        
-                        # logging.info("raw image shape: " + str(raw_img.shape))
-                        # plt.imshow(raw_img)
-                        # plt.show()
 
-                        img = cv2.resize(raw_img, (self.resolution[0], self.resolution[1]))
-                        # logging.info("resized image shape: " + str(img.shape))
-                        # plt.imshow(img)
-                        # plt.show()
+                        img = cv2.resize(raw_img, (224, 224))
 
-                        # revert img shape: (3 x resolution[0] x resolution[1])
-                        img = np.rollaxis(img, 2, 0)
-                        # logging.info("reverted image shape: " + str(img.shape))
+                        #####################################################
+                        # preprocess images and get features: Zekun
+                        #####################################################
+                        x = image.img_to_array(img)
+                        x = np.expand_dims(x, axis=0)
+                        x = preprocess_input(x)
 
-                        # raise NotImplementedError('not implemented for non-Grayscale images')
+                        img_feature = self.convNets.predict(x)
+                        img_feature = np.squeeze(img_feature, axis=0)
+
+                        # final img shape: (channel x resolution[0] x resolution[1]) = (1 x 1 x 2048)
+                        img = img_feature
+                        # logging.info("img shape: " + str(img.shape))
             else:
                 img = raw_img
                 
@@ -167,7 +183,7 @@ class DoomSimulator:
         
         if term:
             self.new_episode() # in multiplayer multi_simulator takes care of this            
-            img = np.zeros((self.num_channels, self.resolution[1], self.resolution[0]), dtype=np.uint8) # should ideally put nan here, but since it's an int...
+            img = np.zeros((self.num_channels, self.resolution[0], self.resolution[1]), dtype=np.uint8) # should ideally put nan here, but since it's an int...
             meas = np.zeros(self.num_meas, dtype=np.uint32) # should ideally put nan here, but since it's an int...
             
         return img, meas, rwrd, term

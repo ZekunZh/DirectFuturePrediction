@@ -77,7 +77,7 @@ def flatten(data):
 
 
 ###############################################
-# VGG19 block
+# VGG19 block - Zekun
 ###############################################
 def vgg19(input_):
     input_shape = input_.get_shape()
@@ -86,9 +86,10 @@ def vgg19(input_):
     return tf.identity(vgg['block1_pool'], name='vgg19_output')
 
 ###############################################
-# ResNet block
+# ResNet block - Zekun
 ###############################################
 def resnet(input_):
     input_shape = input_.get_shape()
     resnet = ResNet50(image_shape=input_shape, input_tensor=input_)
-    return tf.identity(resnet['add_32'], name='resnet_output')
+    resnet_output = tf.identity(resnet['activation_49'], name='resnet_output')
+    return resnet_output, resnet

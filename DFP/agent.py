@@ -8,6 +8,7 @@ import time
 import tensorflow as tf
 import os
 import re
+import logging
 import itertools as it
 from . import util as my_util
 
@@ -148,8 +149,14 @@ class Agent:
     
     def build_model(self):
         # prepare the data
-        self.input_images = tf.placeholder(tf.float32, [None] + [self.state_imgs_shape[1], self.state_imgs_shape[2], self.state_imgs_shape[0]],
+        # self.input_images = tf.placeholder(tf.float32, [None] + [self.state_imgs_shape[1], self.state_imgs_shape[2], self.state_imgs_shape[0]],
+        #                             name='input_images')
+        #####################################################
+        # Input state_imgs
+        #####################################################
+        self.input_images = tf.placeholder(tf.float32, [None] + [1, 2048, 1],
                                     name='input_images')
+
         self.input_measurements = tf.placeholder(tf.float32, [None] + list(self.state_meas_shape),
                                     name='input_measurements')
         self.input_targets = tf.placeholder(tf.float32, [None, self.target_dim],
@@ -170,8 +177,15 @@ class Agent:
             assert(np.all(abs(self.postprocess_predictions(self.preprocess_input_targets(test_arr)) - test_arr) < 1e-8))
         
         # make the actual net
-        self.pred_all, self.pred_relevant = self.make_net(self.input_images_preprocessed, self.input_measurements_preprocessed, self.input_actions, self.input_objective_coeffs) 
-        self.full_loss, self.errs_to_print, self.short_summary, self.detailed_summary = self.make_losses(self.pred_relevant, self.input_targets_preprocessed, self.objective_indices, self.objective_coeffs)
+        self.pred_all, self.pred_relevant = self.make_net(self.input_images_preprocessed,
+                                                            self.input_measurements_preprocessed,
+                                                            self.input_actions, self.input_objective_coeffs)
+
+        self.full_loss, self.errs_to_print, \
+        self.short_summary, self.detailed_summary = self.make_losses(self.pred_relevant, 
+                                                                        self.input_targets_preprocessed, 
+                                                                        self.objective_indices, 
+                                                                        self.objective_coeffs)
         
         # make the saver, lr and param summaries
         self.saver = tf.train.Saver()
@@ -179,21 +193,28 @@ class Agent:
             self.saver_init = self.saver
         
         self.tf_step = tf.Variable(self.curr_step, trainable=False)
-        self.tf_learning_rate = tf.train.exponential_decay(self.init_learning_rate, self.tf_step, self.lr_step_size, self.lr_decay_factor, staircase=True)
+        self.tf_learning_rate = tf.train.exponential_decay(self.init_learning_rate, self.tf_step, 
+                                                            self.lr_step_size, self.lr_decay_factor, staircase=True)
 
         if self.optimizer == 'Adam':
-            self.tf_optim = tf.train.AdamOptimizer(self.tf_learning_rate, beta1=self.adam_beta1, epsilon=self.adam_epsilon)
+            self.tf_optim = tf.train.AdamOptimizer(self.tf_learning_rate, beta1=self.adam_beta1, 
+                                                    epsilon=self.adam_epsilon)
         elif self.optimizer == 'SGD':
             self.tf_optim = tf.train.GradientDescentOptimizer(self.tf_learning_rate)
         else:
             print('Unknown optimizer', self.optimizer)
-            raise
+            raise ValueError("Unknown optimizer" + str(self.optimizer))
         
         if not hasattr(self, 't_vars'):
             self.t_vars = tf.trainable_variables()
+            # convNet variables are not trainable - Zekun
+            # convNet_vars_set = pretrained_convNet.model_weights_tensors
+            # logging.info(convNet_vars_set)
+            # self.t_vars = list(set(tf.trainable_variables()) - convNet_vars_set)
             
         # weight decay
-        self.weights_norms = tf.reduce_sum(input_tensor = self.weight_decay * tf.stack([tf.nn.l2_loss(w) for w in self.t_vars]), name='weights_norm')        
+        self.weights_norms = tf.reduce_sum(input_tensor = self.weight_decay * \
+                                            tf.stack([tf.nn.l2_loss(w) for w in self.t_vars]), name='weights_norm')        
         self.loss_with_weight_decay = self.full_loss + self.weights_norms
         
         if self.clip_gradient:
@@ -213,6 +234,10 @@ class Agent:
         self.param_summary = tf.summary.merge(param_hists + grad_hists)
             
         tf.global_variables_initializer().run(session=self.sess)
+
+        # load pretrained ConvNet weights (this step must be after global_variables_initializer()) - Zekun
+        # pretrained_convNet.load_weights(session=self.sess)
+        # K.set_learning_phase(1)
     
     def act(self, state_imgs, state_meas, objective_coeffs):
         return self.postprocess_actions(self.act_net(state_imgs, state_meas[:,self.meas_for_net], objective_coeffs), self.act_manual(state_meas[:,self.meas_for_manual]))
@@ -268,7 +293,7 @@ class Agent:
                 self.curr_predictions = None
                 return self.agent.random_actions(1)
             else:
-                curr_act  = self.agent.act(state_imgs, state_meas, self.objective_coeffs)
+                curr_act = self.agent.act(state_imgs, state_meas, self.objective_coeffs)
                 self.curr_predictions = self.agent.curr_predictions
                 return curr_act
             
@@ -293,6 +318,8 @@ class Agent:
     
     def train_one_batch(self, experience):
         state_imgs, state_meas, rwrds, terms, acts, targs, objs = experience.get_random_batch(self.batch_size)
+        # logging.info("state_imgs shape: " + str(state_imgs.shape))
+
         acts = self.preprocess_actions(acts)
         res = self.sess.run([self.tf_minim, self.short_summary, self.detailed_summary] + self.errs_to_print,
                         feed_dict={ self.input_images: state_imgs, \
@@ -348,7 +375,7 @@ class Agent:
         print('Filling the training memory')
         experience.add_n_steps_with_actor(simulator, 
                                           experience.capacity / simulator.num_simulators, 
-                                          self.train_actor, verbose=True)               
+                                          self.train_actor, verbose=True)
         
         for _ in range(num_steps):
             if np.mod(self.curr_step, self.checkpoint_every) == 0:

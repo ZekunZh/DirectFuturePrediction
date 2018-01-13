@@ -89,7 +89,7 @@ class MultiExperiment:
             assert('fc_obj_params' in agent_args)
     
         self.test_policy_experience = MultiExperienceMemory(test_policy_experience_args, multi_simulator = self.multi_simulator, target_maker = self.target_maker)
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.3)  # avoid using all gpu memory
+        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)  # avoid using all gpu memory
         self.sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options,log_device_placement=False))
 
         if self.agent_type == 'basic':

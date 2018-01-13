@@ -12,7 +12,7 @@ from .agent import Agent
 
 class FuturePredictorAgentAdvantage(Agent):
     
-    def make_net(self, input_images, input_measurements, input_actions, input_objectives, reuse=False):
+    def make_net(self, input_images, input_measurements, input_actions, input_objectives, reuse=False, return_convNet=False):
         if reuse:
             tf.get_variable_scope().reuse_variables()
         
@@ -23,17 +23,23 @@ class FuturePredictorAgentAdvantage(Agent):
         ######################################
         # Original ConvNets
         ######################################
-        p_img_conv = my_ops.conv_encoder(input_images, self.conv_params, 'p_img_conv', msra_coeff=0.9)
+        # p_img_conv = my_ops.conv_encoder(input_images, self.conv_params, 'p_img_conv', msra_coeff=0.9)
 
         ######################################
-        # VGG19
+        # VGG19 - Zekun
         ######################################
         # p_img_conv = my_ops.vgg19(input_images)
         
         ######################################
-        # ResNet
+        # ResNet - Zekun
         ######################################
-        # p_img_conv = my_ops.resnet(input_images)
+        # p_img_conv, convNet = my_ops.resnet(input_images)
+        # return_convNet = True
+
+        ######################################
+        # Image features after ConvNets - Zekun
+        ######################################
+        p_img_conv = input_images
 
         p_img_fc = my_ops.fc_net(my_ops.flatten(p_img_conv), self.fc_img_params, 'p_img_fc', msra_coeff=0.9)
         p_meas_fc = my_ops.fc_net(input_measurements, self.fc_meas_params, 'p_meas_fc', msra_coeff=0.9)
@@ -54,7 +60,10 @@ class FuturePredictorAgentAdvantage(Agent):
         pred_all = pred_all_nomean + tf.reshape(p_val_fc, [-1, 1, self.target_dim])
         pred_relevant = tf.boolean_mask(pred_all, tf.cast(input_actions, tf.bool))
         
-        return pred_all, pred_relevant
+        if return_convNet:
+            return pred_all, pred_relevant, convNet
+        else:
+            return pred_all, pred_relevant
     
     def make_losses(self, pred_relevant, targets_preprocessed, objective_indices, objective_coeffs):
         # make a loss function and compute some summary numbers
