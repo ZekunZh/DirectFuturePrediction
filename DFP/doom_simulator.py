@@ -5,10 +5,6 @@ from __future__ import print_function
 import sys
 import os
 import logging
-import numpy as np
-import tensorflow as tf
-from keras.preprocessing import image
-from keras.applications.resnet50 import preprocess_input
 
 vizdoom_path = '../../../ViZDoom-1.1.0-Win-Python35-x86_64/vizdoom'
 # vizdoom_path = '/home/zekun/Work/4A-MVA/ObjectRecog/project/vizdoom_2017_11_30'
@@ -22,7 +18,6 @@ import time
 import numpy as np
 import re
 import cv2
-import matplotlib.pyplot as plt
 
 class DoomSimulator:
     
@@ -59,9 +54,9 @@ class DoomSimulator:
         if self.color_mode == 'RGB':
             self._game.set_screen_format(vizdoom.ScreenFormat.CRCGCB)
             #####################################################
-            # Note that after ConvNet, channel = 1 - Zekun
+            # Note that before ConvNet, channel = 3 - Zekun
             #####################################################
-            self.num_channels = 1
+            self.num_channels = 3
         elif self.color_mode == 'GRAY':
             self._game.set_screen_format(vizdoom.ScreenFormat.GRAY8)
             self.num_channels = 1
@@ -82,13 +77,6 @@ class DoomSimulator:
         self.episode_count = 0
         self.game_initialized = False
 
-        #####################################################
-        # Initialize ConvNet for preprocessing - Zekun
-        #####################################################
-        # convNets = Model(inputs=resnet.input, outputs=resnet.get_layer('activation_49').output)
-        # self.convNets = Model(inputs=base_model.input, outputs=base_model.get_layer('activation_49').output)
-        self.convNets = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
-        logging.info("ConvNets initialized...")
         
     def analyze_controls(self, config_file):
         with open(config_file, 'r') as myfile:
@@ -144,36 +132,21 @@ class DoomSimulator:
                     if raw_img is None:
                         img = None
                     else:
-                        # cv2.imshow("raw_imag", raw_img[0])
-                        # cv2.waitKey(0)
-                        # cv2.destroyAllWindows()
-
                         # img shape: (1 x resolution[0] x resolution[1])
                         img = cv2.resize(raw_img[0], (self.resolution[0], self.resolution[1]))[None,:,:]
                         # logging.info("image shape: " + str(img.shape))
                 elif self.color_mode == 'RGB':
+                    #####################################################
+                    # Implement resize for RGB - Zekun
+                    #####################################################
                     if raw_img is None:
                         img = None
                     else:
                         # transform raw_img:  
                         # (channel x height x width) -> (height x width x channel)
                         raw_img = np.rollaxis(raw_img, 0, 3)
-
                         img = cv2.resize(raw_img, (224, 224))
 
-                        #####################################################
-                        # preprocess images and get features: Zekun
-                        #####################################################
-                        x = image.img_to_array(img)
-                        x = np.expand_dims(x, axis=0)
-                        x = preprocess_input(x)
-
-                        img_feature = self.convNets.predict(x)
-                        img_feature = np.squeeze(img_feature, axis=0)
-
-                        # final img shape: (channel x resolution[0] x resolution[1]) = (1 x 1 x 2048)
-                        img = img_feature
-                        # logging.info("img shape: " + str(img.shape))
             else:
                 img = raw_img
                 
@@ -182,8 +155,13 @@ class DoomSimulator:
         term = self._game.is_episode_finished() or self._game.is_player_dead()
         
         if term:
-            self.new_episode() # in multiplayer multi_simulator takes care of this            
-            img = np.zeros((self.num_channels, self.resolution[0], self.resolution[1]), dtype=np.uint8) # should ideally put nan here, but since it's an int...
+            self.new_episode() # in multiplayer multi_simulator takes care of this
+            #####################################################
+            # Zeros img for RGB - Zekun
+            #####################################################
+            img = np.zeros((224, 224, 3), dtype=np.uint8)
+            # img = np.zeros((self.num_channels, self.resolution[0], self.resolution[1]), dtype=np.uint8) # should ideally put nan here, but since it's an int...
+
             meas = np.zeros(self.num_meas, dtype=np.uint32) # should ideally put nan here, but since it's an int...
             
         return img, meas, rwrd, term

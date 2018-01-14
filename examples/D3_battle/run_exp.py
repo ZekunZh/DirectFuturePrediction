@@ -29,7 +29,7 @@ def main(main_args):
     simulator_args['maps'] = ['MAP01']
     simulator_args['switch_maps'] = False
     #train
-    simulator_args['num_simulators'] = 2
+    simulator_args['num_simulators'] = 4
     
     ## Experience
     # Train experience

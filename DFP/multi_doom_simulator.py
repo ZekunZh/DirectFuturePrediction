@@ -4,6 +4,12 @@ Several doom simulators running otgether
 from __future__ import print_function
 from .doom_simulator import DoomSimulator
 
+import numpy as np
+import tensorflow as tf
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input
+import logging
+
 class MultiDoomSimulator:
     
     def __init__(self, all_args):
@@ -21,6 +27,15 @@ class MultiDoomSimulator:
         self.maps = self.simulators[0].maps
         self.continuous_controls = self.simulators[0].continuous_controls
         self.discrete_controls = self.simulators[0].discrete_controls
+
+
+        #####################################################
+        # Initialize ConvNet for preprocessing - Zekun
+        #####################################################
+        # convNets = Model(inputs=resnet.input, outputs=resnet.get_layer('activation_49').output)
+        # self.convNets = Model(inputs=base_model.input, outputs=base_model.get_layer('activation_49').output)
+        self.convNets = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
+        logging.info("ConvNets initialized...")
             
     def step(self, actions):
         """
@@ -43,6 +58,20 @@ class MultiDoomSimulator:
         
         for (sim,act) in zip(self.simulators, actions):
             img, meas, rwrd, term = sim.step(act)
+            #####################################################
+            # preprocess images and get features: Zekun
+            #####################################################
+            x = image.img_to_array(img)
+            x = np.expand_dims(x, axis=0)
+            x = preprocess_input(x)
+
+            img_feature = self.convNets.predict(x)
+            img_feature = np.squeeze(img_feature, axis=0)
+
+            # final img shape: (channel x resolution[0] x resolution[1]) = (1 x 1 x 2048)
+            img = img_feature
+            # logging.info("img shape: " + str(img.shape))
+
             imgs.append(img)
             meass.append(meas)
             rwrds.append(rwrd)
