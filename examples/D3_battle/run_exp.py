@@ -29,7 +29,7 @@ def main(main_args):
     simulator_args['maps'] = ['MAP01']
     simulator_args['switch_maps'] = False
     #train
-    simulator_args['num_simulators'] = 4
+    simulator_args['num_simulators'] = 1
     
     ## Experience
     # Train experience
@@ -70,7 +70,12 @@ def main(main_args):
     # net parameters
     agent_args['conv_params']     = np.array([(32,8,4), (64,4,2), (64,3,1)],
                                      dtype = [('out_channels',int), ('kernel',int), ('stride',int)])
-    agent_args['fc_img_params']   = np.array([(512,)], dtype = [('out_dims',int)])
+    #####################################################
+    # Add three fc layers for input features - Zekun
+    #####################################################
+    agent_args['fc_img_params'] = np.array([(1024,), (512,)],
+                                     dtype=[('out_dims', int)])
+    # agent_args['fc_img_params']   = np.array([(512,)], dtype = [('out_dims',int)])
     agent_args['fc_meas_params']  = np.array([(128,), (128,), (128,)], dtype = [('out_dims',int)]) 
     agent_args['fc_joint_params'] = np.array([(512,), (-1,)], dtype = [('out_dims',int)]) # we put -1 here because it will be automatically replaced when creating the net
     agent_args['weight_decay'] = 0.00000
@@ -109,7 +114,7 @@ def main(main_args):
     experiment_args['test_objective_coeffs_temporal'] = np.array([0., 0., 0., 0.5, 0.5, 1.])
     experiment_args['test_objective_coeffs_meas'] = np.array([0.5,0.5,1.])
     experiment_args['test_random_prob'] = 0.
-    experiment_args['test_checkpoint'] = 'checkpoints/2017_04_08_10_44_20'
+    experiment_args['test_checkpoint'] = 'checkpoints/2018_01_13_22_17_17'
     experiment_args['test_policy_num_steps'] = 2000
     experiment_args['show_predictions'] = False
     experiment_args['multiplayer'] = False

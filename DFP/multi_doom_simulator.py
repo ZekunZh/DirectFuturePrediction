@@ -6,6 +6,7 @@ from .doom_simulator import DoomSimulator
 
 import numpy as np
 import tensorflow as tf
+from keras.models import Model
 from keras.preprocessing import image
 from keras.applications.resnet50 import preprocess_input
 import logging
@@ -32,8 +33,8 @@ class MultiDoomSimulator:
         #####################################################
         # Initialize ConvNet for preprocessing - Zekun
         #####################################################
-        # convNets = Model(inputs=resnet.input, outputs=resnet.get_layer('activation_49').output)
-        # self.convNets = Model(inputs=base_model.input, outputs=base_model.get_layer('activation_49').output)
+        # self.base_model = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
+        # self.convNets = Model(inputs=self.base_model.input, outputs=self.base_model.get_layer('activation_49').output)
         self.convNets = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
         logging.info("ConvNets initialized...")
             
